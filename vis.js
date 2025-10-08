@@ -140,8 +140,8 @@ d3.csv("wwo-pca-edited.csv").then(function(data) {
     const authors = color.domain();
 
     // Track which authors and genres are active (now all visible)
-    const activeAuthors = new Set(authors);
-    const activeGenres = new Set(genres);
+    let activeAuthors = new Set(authors);
+    let activeGenres = new Set(genres);
 
     // Function to update point visibility based on both legend states
     function updatePointVisibility() { 
@@ -173,7 +173,22 @@ d3.csv("wwo-pca-edited.csv").then(function(data) {
         .data(authors)
         .join("g")
         .attr("class", "author-legend-item")
-        .attr("transform", (d, i) => `translate(0, ${i * 25})`);
+        .attr("transform", (d, i) => `translate(0, ${i * 25})`)
+        .on("click", function(event, d) {
+            // Toggle this author in the Set
+            if (activeAuthors.has(d)) {
+                activeAuthors.delete(d);
+                d3.select(this).transition().style("opacity", 0.3);
+            } else {
+                activeAuthors.add(d);
+                d3.select(this).transition().style("opacity", 1);
+            }
+            // Update all points based on both legends
+            updatePointVisibility();
+        })
+        .on("mouseover", function(event, d) {
+            d3.select(this).style("cursor", "pointer"); 
+        });
     
     authorLegendItems.append("circle")
         .attr("r", 5)
@@ -185,25 +200,29 @@ d3.csv("wwo-pca-edited.csv").then(function(data) {
         .attr("y", 5)  // vertically center with symbol
         .attr("font-size", "12px")
         .text(d => d)
-        .on("click", function(event, d) {
-            // Toggle this author in the Set
-            if (activeAuthors.has(d)) {
-                activeAuthors.delete(d);
-                d3.select(this.parentNode).transition().style("opacity", 0.3);
-            } else {
-                activeAuthors.add(d);
-                d3.select(this.parentNode).transition().style("opacity", 1);
-            }
-            // Update all points based on both legends
-            updatePointVisibility();
-        });
+        
 
     // Create a group for each legend item
     const legendItems = legend.selectAll(".legend-item")
         .data(genres)
         .join("g")
         .attr("class", "legend-item")
-        .attr("transform", (d, i) => `translate(0, ${i * 25})`); // stack vertically, 25px apart
+        .attr("transform", (d, i) => `translate(0, ${i * 25})`) // stack vertically, 25px apart
+        .on("click", function(event, d) {
+        // Toggle this genre in the Set
+            if (activeGenres.has(d)) {
+                activeGenres.delete(d);
+                d3.select(this).transition().style("opacity", 0.3);
+            } else {
+                activeGenres.add(d);
+                d3.select(this).transition().style("opacity", 1);
+            }
+            // Update all points based on both legends
+            updatePointVisibility();
+        })
+        .on("mouseover", function(event, d) {
+            d3.select(this).style("cursor", "pointer"); 
+        });
 
     // Add the symbol to each item
     legendItems.append("path")
@@ -216,19 +235,29 @@ d3.csv("wwo-pca-edited.csv").then(function(data) {
         .attr("y", 5)  // vertically center with symbol
         .attr("font-size", "12px")
         .text(d => d)
-        .on("click", function(event, d) {
-        // Toggle this genre in the Set
-            if (activeGenres.has(d)) {
-                activeGenres.delete(d);
-                d3.select(this.parentNode).transition().style("opacity", 0.3);
-            } else {
-                activeGenres.add(d);
-                d3.select(this.parentNode).transition().style("opacity", 1);
-            }
-            // Update all points based on both legends
+        
+
+    d3.select("#container")
+        .append("button")
+        .style("position", "absolute")
+        .style("left", width + margin.top + 20 +  "px")
+        .style("top", (margin.top + 450) + "px")
+        .attr("type", "button")
+        .attr("title", "Reset")
+        .text("Reset")
+        .on("click", function() {
+            activeAuthors = new Set(authors)
+            activeGenres = new Set(genres);
             updatePointVisibility();
+            d3.selectAll(".author-legend-item").transition().style("opacity", 1)
+            d3.selectAll(".legend-item").transition().style("opacity", 1)
         });
+    
+    
+
 });
+
+
 
 
 // Append the SVG element.
