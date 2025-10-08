@@ -241,7 +241,7 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
     d3.select("#container")
         .append("button")
         .style("position", "absolute")
-        .style("left", width + margin.top + 20 + "px")
+        .style("left", width + margin.left + 10 + "px")
         .style("top", (margin.top + 450) + "px")
         .attr("type", "button")
         .text("Reset")
@@ -257,4 +257,4 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
 });
 
 // Append the SVG element.
-container.append(svg.node());
+d3.select("#container").node().appendChild(svg.node());
