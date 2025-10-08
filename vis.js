@@ -122,7 +122,7 @@ d3.csv("wwo-pca-edited.csv").then(function(data) {
         return `translate(${x(d.PC1)}, ${y(d.PC2)})`; 
         })
         // setting class
-        .attr("class", function(d){return `${d['Simple Genre']} ${d['AuthorGrouped']}`})
+        .attr("class", function(d){return `data-point ${d['Simple Genre']} ${d['AuthorGrouped']}`})
         // color
         .style("fill", d => color(d.AuthorGrouped))
         // mouseover tooltip function
@@ -145,7 +145,7 @@ d3.csv("wwo-pca-edited.csv").then(function(data) {
 
     // Function to update point visibility based on both legend states
     function updatePointVisibility() { 
-        dataRegion.selectAll("path").each(function() {
+        dataRegion.selectAll("path.data-point").each(function() {
             const point = d3.select(this);
             const classList = this.classList;
             // Get the author and genre from the point's classes or data
