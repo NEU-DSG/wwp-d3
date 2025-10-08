@@ -36,7 +36,7 @@ const dataRegion = svg
 svg.append("text")
     .attr("class", "title")
     .attr("x", width / 2 + margin.left) //positions it at the middle of the width
-    .attr("y", margin.top) //positions it from the top by the margin top
+    .attr("y", margin.top / 2) //positions it from the top by the margin top
     .attr("font-family", "sans-serif")
     .attr("text-anchor", "middle")
     .attr("font-weight", "bold")
