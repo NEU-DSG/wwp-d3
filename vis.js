@@ -165,7 +165,8 @@ d3.csv("wwo-pca-edited.csv").then(function(data) {
             isVisible = pointAuthor && pointGenre && 
                     activeAuthors.has(pointAuthor) && activeGenres.has(pointGenre);
             
-            point.transition().style("opacity", isVisible ? 1 : 0.1);
+            point.transition().style("opacity", isVisible ? 1 : 0.1)
+            .style("pointer-events", isVisible ? "all" : "none");
         });
     }
 
