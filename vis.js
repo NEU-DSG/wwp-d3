@@ -53,7 +53,7 @@ svg.append("text")
     .attr("x", width / 2 + margin.left)
     .attr("y", height + margin.top + 40)
     .attr("font-family", "sans-serif")
-    .attr("text-anchor", "end")
+    .attr("text-anchor", "middle")
     .text("PC1");
 
 // Add the y-axis.
@@ -254,9 +254,6 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
             d3.selectAll(".author-legend-item").transition().style("opacity", 1)
             d3.selectAll(".legend-item").transition().style("opacity", 1)
         });
-
-
-
 });
 
 // Append the SVG element.
