@@ -128,7 +128,7 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
         // mouseover tooltip function
         .on("mouseover", function (event, d) {
             tooltip.transition().duration(200).style("opacity", .9);
-            tooltip.html(`Author: ${d.Author}<br>PC1: ${d.PC1}<br>PC2: ${d.PC2}<br>Simple Genre: ${d['Simple Genre']}<br>WWO Title: ${d['WWO Title']}`)
+            tooltip.html(`Author: ${d['Full Author']}<br>PC1: ${d.PC1}<br>PC2: ${d.PC2}<br>Simple Genre: ${d['Simple Genre']}<br>WWO Title: ${d['WWO Title']}`)
                 .style("left", (event.pageX + 10) + "px")
                 .style("top", (event.pageY - 10) + "px");
         })
