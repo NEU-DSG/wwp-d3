@@ -71,11 +71,11 @@ svg.append("text")
     .text("PC2");
 
 // Add legend
-var legend = svg.append("g")
+let legend = svg.append("g")
     .attr("transform", "translate(" + (margin.left + width) + ", " + (margin.top) + ")");
 
 // Add legend
-var authorLegend = svg.append("g")
+let authorLegend = svg.append("g")
     .attr("transform", "translate(" + (margin.left + width) + ", " + (margin.top + 125) + ")");
 
 // Create the tooltip box
