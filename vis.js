@@ -70,11 +70,11 @@ svg.append("text")
     .attr("fill", "currentColor")
     .text("PC2");
 
-// Add legend
+// Add shape legend
 let legend = svg.append("g")
     .attr("transform", "translate(" + (margin.left + width) + ", " + (margin.top) + ")");
 
-// Add legend
+// Add author legend
 let authorLegend = svg.append("g")
     .attr("transform", "translate(" + (margin.left + width) + ", " + (margin.top + 125) + ")");
 
@@ -96,18 +96,23 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
     const shape = d3.scaleOrdinal()
         .domain(data.map(d => d['Simple Genre']))
         .range(d3.symbols);
-    // Create color scale but group together authors with 1 publication
+    // Create author-color scale but group together authors with 1 publication
     // Create a rollup map of author count
     const authorCounts = d3.rollup(data, v => v.length, d => d.Author)
-    // add a column to the dataset of either the author name or Other if they
-    // Have one publication
+    // Add a column to the dataset of either the author name or Other if they
+    // have less than three publications
     data.forEach(d => {
-        d.AuthorGrouped = authorCounts.get(d.Author) > 3 ? d.Author : "Other"
+        d.AuthorGrouped = authorCounts.get(d.Author) > 5 ? d.Author : "Other"
     })
     // Create scale off of the new column
+    // Changing the color scheme to try and be more accessible to fit WCAG contrast rules
+    // Got the scheme from IBM's Design Language Carbon: https://carbondesignsystem.com/data-visualization/color-palettes/#categorical-palettes
     const color = d3.scaleOrdinal()
         .domain(data.map(d => d.AuthorGrouped))
-        .range(d3.schemePaired);
+        .range(['#6929c4', '#1192e8', '#005d5d', '#9f1853', '#fa4d56', '#570408', '#198038']);
+        // .range(['#ee7733', '#0077bb', '#33bbee', '#ee3377', '#cc3311', '#009988', '#bbbbb']);
+        // .range(['#cc6677', '#332288', '#ddcc77', '#117733', '#88ccee', '#882255', '#44aa99', '#999933', '#aa4499', '#e67433']);
+        // .range(d3.schemeCategory10)
     // add data
     dataRegion.append('g')
         .selectAll("path")
