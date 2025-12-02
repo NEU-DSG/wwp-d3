@@ -1,0 +1,8 @@
+/* Took this from https://web.dev/articles/control-focus-with-tabindex */
+.author-legend-item:focus-visible {
+  outline: 4px dashed darkorange;
+}
+
+.legend-item:focus-visible {
+  outline: 4px dashed darkorange;
+}

@@ -195,11 +195,15 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
         });
     }
 
+    // Function to create an author legend item
+    // One author legend item is the circle with its color, and then the name of the author
     const authorLegendItems = authorLegend.selectAll(".author-legend-item")
         .data(authors)
         .join("g")
         .attr("tabindex", 0)
+        // setting ARIA roles and properties
         .attr("role", "button")
+        .attr("aria-pressed", "true")
         .attr("class", "author-legend-item")
         .attr("transform", (d, i) => `translate(0, ${i * 25})`)
         .on("click", function (event, d) {
@@ -207,9 +211,11 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
             if (activeAuthors.has(d)) {
                 activeAuthors.delete(d);
                 d3.select(this).transition().style("opacity", 0.3);
+                d3.select(this).attr("aria-pressed", "false")
             } else {
                 activeAuthors.add(d);
                 d3.select(this).transition().style("opacity", 1);
+                d3.select(this).attr("aria-pressed", "true")
             }
             // Update all points based on both legends
             updatePointVisibility();
@@ -220,9 +226,11 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
                 if (activeAuthors.has(d)) {
                     activeAuthors.delete(d);
                     d3.select(this).transition().style("opacity", 0.3);
+                    d3.select(this).attr("aria-pressed", "false")
                 } else {
                     activeAuthors.add(d);
                     d3.select(this).transition().style("opacity", 1);
+                    d3.select(this).attr("aria-pressed", "true")
                 }
                 // Update all points based on both legends
                 updatePointVisibility();
@@ -245,11 +253,14 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
 
 
     // Create a group for each legend item
+    // One legend item is the shape and the name of the genre together.
     const legendItems = legend.selectAll(".legend-item")
         .data(genres)
         .join("g")
         .attr("tabindex", 0)
+        // Setting ARIA role and properties
         .attr("role", "button")
+        .attr("aria-pressed", "true")
         .attr("class", "legend-item")
         .attr("transform", (d, i) => `translate(0, ${i * 25})`) // stack vertically, 25px apart
         .on("click", function (event, d) {
@@ -257,9 +268,11 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
             if (activeGenres.has(d)) {
                 activeGenres.delete(d);
                 d3.select(this).transition().style("opacity", 0.3);
+                d3.select(this).attr("aria-pressed", "false")
             } else {
                 activeGenres.add(d);
                 d3.select(this).transition().style("opacity", 1);
+                d3.select(this).attr("aria-pressed", "true")
             }
             // Update all points based on both legends
             updatePointVisibility();
@@ -270,9 +283,11 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
                 if (activeGenres.has(d)) {
                     activeGenres.delete(d);
                     d3.select(this).transition().style("opacity", 0.3);
+                    d3.select(this).attr("aria-pressed", "false")
                 } else {
                     activeGenres.add(d);
                     d3.select(this).transition().style("opacity", 1);
+                    d3.select(this).attr("aria-pressed", "true")
                 }
                 // Update all points based on both legends
                 updatePointVisibility();
