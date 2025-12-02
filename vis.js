@@ -198,6 +198,8 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
     const authorLegendItems = authorLegend.selectAll(".author-legend-item")
         .data(authors)
         .join("g")
+        .attr("tabindex", 0)
+        .attr("role", "button")
         .attr("class", "author-legend-item")
         .attr("transform", (d, i) => `translate(0, ${i * 25})`)
         .on("click", function (event, d) {
@@ -211,6 +213,20 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
             }
             // Update all points based on both legends
             updatePointVisibility();
+        })
+        .on("keydown", function (event, d) {
+            if (event.key === "Enter" || event.key === " ") {
+                // Toggle this author in the Set
+                if (activeAuthors.has(d)) {
+                    activeAuthors.delete(d);
+                    d3.select(this).transition().style("opacity", 0.3);
+                } else {
+                    activeAuthors.add(d);
+                    d3.select(this).transition().style("opacity", 1);
+                }
+                // Update all points based on both legends
+                updatePointVisibility();
+            }
         })
         .on("mouseover", function (event, d) {
             d3.select(this).style("cursor", "pointer");
@@ -232,6 +248,8 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
     const legendItems = legend.selectAll(".legend-item")
         .data(genres)
         .join("g")
+        .attr("tabindex", 0)
+        .attr("role", "button")
         .attr("class", "legend-item")
         .attr("transform", (d, i) => `translate(0, ${i * 25})`) // stack vertically, 25px apart
         .on("click", function (event, d) {
@@ -245,6 +263,20 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
             }
             // Update all points based on both legends
             updatePointVisibility();
+        })
+        .on("keydown", function (event, d) {
+            if (event.key === "Enter" || event.key === " ") {
+                // Toggle this genre in the Set
+                if (activeGenres.has(d)) {
+                    activeGenres.delete(d);
+                    d3.select(this).transition().style("opacity", 0.3);
+                } else {
+                    activeGenres.add(d);
+                    d3.select(this).transition().style("opacity", 1);
+                }
+                // Update all points based on both legends
+                updatePointVisibility();
+            }
         })
         .on("mouseover", function (event, d) {
             d3.select(this).style("cursor", "pointer");
