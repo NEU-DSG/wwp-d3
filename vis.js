@@ -26,6 +26,22 @@ const svg = d3.select("#container")
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
+    .attr("role", "img")
+    .attr("aria-labelledby", "wwp-title")
+    .attr("aria-describedby", "wwp-desc")
+
+// Create svg title for aria attributes
+svg
+    .append("title")
+    .attr("id", "wwp-title")
+    .text("PCA scatter plot for the Women Writers Project")
+
+// Create svg desc for aria attributes
+svg
+    .append("desc")
+    .attr("id", "wwp-desc")
+    .text(`This is a scatter plot plotting the Principal Component Analysis (PCA) outputs of writers from Northeastern University's 
+        Women Writers Project. Points are plotted by PCA values, colored by author, and shaped by their genre.`)
 
 // move to-be graphic within the margin
 const dataRegion = svg
@@ -33,6 +49,7 @@ const dataRegion = svg
     .attr("transform", `translate(${margin.left}, ${margin.top})`)
 
 // Add the Title
+// I'm using this separately than the accessible <title>, I think this should be still good practice from what I've read.
 svg.append("text")
     .attr("class", "title")
     .attr("x", width / 2 + margin.left) //positions it at the middle of the width
