@@ -46,7 +46,6 @@ svg.append("text")
 dataRegion.append("g")
     .attr("transform", `translate(0,${height})`)
     .call(d3.axisBottom(x))
-// Add label
 
 // Add x-axis label
 svg.append("text")
@@ -100,7 +99,7 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
     // Create a rollup map of author count
     const authorCounts = d3.rollup(data, v => v.length, d => d.Author)
     // Add a column to the dataset of either the author name or Other if they
-    // have less than three publications
+    // have less than five publications
     data.forEach(d => {
         d.AuthorGrouped = authorCounts.get(d.Author) > 5 ? d.Author : "Other"
     })
@@ -108,7 +107,8 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
     // Changing the color scheme to try and be more accessible to fit WCAG contrast rules
     // Turns out finding a categorical color scheme for a large amount of categories that both fit
     // the 3:1 graphics contrast WCAG rule and be friendly to colorblindness is a difficult problem
-    // Ended up reducing the categories and going off of Paul Tol's color schemes: https://cran.r-project.org/web/packages/khroma/vignettes/tol.html#sec:high-contrast
+    // Ended up reducing the categories and going off of Paul Tol's color schemes: 
+    // https://cran.r-project.org/web/packages/khroma/vignettes/tol.html#sec:high-contrast
     const color = d3.scaleOrdinal()
         .domain(data.map(d => d.AuthorGrouped))
         .range(['#325981', '#EE6677', '#228833', '#a19436', '#43a1b1', '#AA3377', '#888888'])
@@ -129,7 +129,7 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
         .attr("transform", function (d) {
             return `translate(${x(d.PC1)}, ${y(d.PC2)})`;
         })
-        // setting class
+        // setting class - this is mainly for activating and muting
         .attr("class", function (d) { return `data-point ${d['Simple Genre']} ${d['AuthorGrouped']}` })
         // color
         .style("fill", d => color(d.AuthorGrouped))
