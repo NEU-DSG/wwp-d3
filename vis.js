@@ -106,10 +106,13 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
     })
     // Create scale off of the new column
     // Changing the color scheme to try and be more accessible to fit WCAG contrast rules
-    // Got the scheme from IBM's Design Language Carbon: https://carbondesignsystem.com/data-visualization/color-palettes/#categorical-palettes
+    // Turns out finding a categorical color scheme for a large amount of categories that both fit
+    // the 3:1 graphics contrast WCAG rule and be friendly to colorblindness is a difficult problem
+    // Ended up reducing the categories and going off of Paul Tol's color schemes: https://cran.r-project.org/web/packages/khroma/vignettes/tol.html#sec:high-contrast
     const color = d3.scaleOrdinal()
         .domain(data.map(d => d.AuthorGrouped))
-        .range(['#6929c4', '#1192e8', '#005d5d', '#9f1853', '#fa4d56', '#570408', '#198038']);
+        .range(['#325981', '#EE6677', '#228833', '#a19436', '#43a1b1', '#AA3377', '#888888'])
+        // .range(['#6929c4', '#1192e8', '#005d5d', '#9f1853', '#fa4d56', '#570408', '#198038']);
         // .range(['#ee7733', '#0077bb', '#33bbee', '#ee3377', '#cc3311', '#009988', '#bbbbb']);
         // .range(['#cc6677', '#332288', '#ddcc77', '#117733', '#88ccee', '#882255', '#44aa99', '#999933', '#aa4499', '#e67433']);
         // .range(d3.schemeCategory10)
