@@ -98,13 +98,6 @@ let authorLegend = svg.append("g")
 const tooltip = d3.select("#container")
     .append("div")
     .attr("class", "tooltip")
-    .style("opacity", 0)
-    .style("position", "absolute")
-    .style("padding", "10px")
-    .style("background", "rgba(0,0,0,0.7)")
-    .style("color", "white")
-    .style("border-radius", "5px")
-    .style("pointer-events", "none");
 
 // import the csv and pass to function
 d3.csv("wwo-pca-edited.csv").then(function (data) {
@@ -220,6 +213,7 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
             // Update all points based on both legends
             updatePointVisibility();
         })
+        // update on keypress as well (enter and space)
         .on("keydown", function (event, d) {
             if (event.key === "Enter" || event.key === " ") {
                 // Toggle this author in the Set
@@ -277,6 +271,7 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
             // Update all points based on both legends
             updatePointVisibility();
         })
+        // update on keypress as well (enter and space)
         .on("keydown", function (event, d) {
             if (event.key === "Enter" || event.key === " ") {
                 // Toggle this genre in the Set
