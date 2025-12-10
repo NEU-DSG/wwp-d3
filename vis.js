@@ -195,8 +195,10 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
         .join("g")
         .attr("tabindex", 0)
         // setting ARIA roles and properties
+        // on second thought going to comment the aria-pressed tags out because I'm not sure if 
+        // its helpful if the scatter plot points themselves are also not broadly accessibly
         .attr("role", "button")
-        .attr("aria-pressed", "true")
+        // .attr("aria-pressed", "true")
         .attr("class", "author-legend-item")
         .attr("transform", (d, i) => `translate(0, ${i * 25})`)
         .on("click", function (event, d) {
@@ -204,11 +206,11 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
             if (activeAuthors.has(d)) {
                 activeAuthors.delete(d);
                 d3.select(this).transition().style("opacity", 0.3);
-                d3.select(this).attr("aria-pressed", "false")
+                // d3.select(this).attr("aria-pressed", "false")
             } else {
                 activeAuthors.add(d);
                 d3.select(this).transition().style("opacity", 1);
-                d3.select(this).attr("aria-pressed", "true")
+                // d3.select(this).attr("aria-pressed", "true")
             }
             // Update all points based on both legends
             updatePointVisibility();
@@ -220,11 +222,11 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
                 if (activeAuthors.has(d)) {
                     activeAuthors.delete(d);
                     d3.select(this).transition().style("opacity", 0.3);
-                    d3.select(this).attr("aria-pressed", "false")
+                    // d3.select(this).attr("aria-pressed", "false")
                 } else {
                     activeAuthors.add(d);
                     d3.select(this).transition().style("opacity", 1);
-                    d3.select(this).attr("aria-pressed", "true")
+                    // d3.select(this).attr("aria-pressed", "true")
                 }
                 // Update all points based on both legends
                 updatePointVisibility();
@@ -254,7 +256,7 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
         .attr("tabindex", 0)
         // Setting ARIA role and properties
         .attr("role", "button")
-        .attr("aria-pressed", "true")
+        // .attr("aria-pressed", "true")
         .attr("class", "legend-item")
         .attr("transform", (d, i) => `translate(0, ${i * 25})`) // stack vertically, 25px apart
         .on("click", function (event, d) {
@@ -262,11 +264,11 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
             if (activeGenres.has(d)) {
                 activeGenres.delete(d);
                 d3.select(this).transition().style("opacity", 0.3);
-                d3.select(this).attr("aria-pressed", "false")
+                // d3.select(this).attr("aria-pressed", "false")
             } else {
                 activeGenres.add(d);
                 d3.select(this).transition().style("opacity", 1);
-                d3.select(this).attr("aria-pressed", "true")
+                // d3.select(this).attr("aria-pressed", "true")
             }
             // Update all points based on both legends
             updatePointVisibility();
@@ -278,11 +280,11 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
                 if (activeGenres.has(d)) {
                     activeGenres.delete(d);
                     d3.select(this).transition().style("opacity", 0.3);
-                    d3.select(this).attr("aria-pressed", "false")
+                    // d3.select(this).attr("aria-pressed", "false")
                 } else {
                     activeGenres.add(d);
                     d3.select(this).transition().style("opacity", 1);
-                    d3.select(this).attr("aria-pressed", "true")
+                    // d3.select(this).attr("aria-pressed", "true")
                 }
                 // Update all points based on both legends
                 updatePointVisibility();
