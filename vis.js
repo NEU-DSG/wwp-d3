@@ -4,11 +4,11 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 const margin = {
     left: 80,
     bottom: 50,
-    right: 300,
+    right: 80,
     top: 70
 }
 
-const width = 1080 - margin.left - margin.right
+const width = 960 - margin.left - margin.right
 const height = 600 - margin.top - margin.bottom
 
 // Declare x scale
@@ -107,11 +107,11 @@ d3.csv("wwo-pca-edited.csv").then(function (data) {
         .range(d3.symbols);
     // Create author-color scale but group together authors with 1 publication
     // Create a rollup map of author count
-    const authorCounts = d3.rollup(data, v => v.length, d => d['Full Author'])
+    const authorCounts = d3.rollup(data, v => v.length, d => d.Author)
     // Add a column to the dataset of either the author name or Other if they
     // have less than five publications
     data.forEach(d => {
-        d.AuthorGrouped = authorCounts.get(d['Full Author']) > 5 ? d['Full Author'] : "Other"
+        d.AuthorGrouped = authorCounts.get(d.Author) > 5 ? d.Author : "Other"
     })
     // Create scale off of the new column
     // Changing the color scheme to try and be more accessible to fit WCAG contrast rules
