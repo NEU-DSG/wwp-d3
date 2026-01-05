@@ -4,11 +4,11 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 const margin = {
     left: 80,
     bottom: 50,
-    right: 80,
+    right: 100,
     top: 70
 }
 
-const width = 960 - margin.left - margin.right
+const width = 980 - margin.left - margin.right
 const height = 600 - margin.top - margin.bottom
 
 // Declare x scale
@@ -87,11 +87,14 @@ svg.append("text")
     .text("PC2");
 
 // Add shape legend
-let legend = svg.append("g")
+let legendGroup = svg.append("g")
+    .attr("id", "legendGroup")
+
+let legend = legendGroup.append("g")
     .attr("transform", "translate(" + (margin.left + width) + ", " + (margin.top) + ")");
 
 // Add author legend
-let authorLegend = svg.append("g")
+let authorLegend = legendGroup.append("g")
     .attr("transform", "translate(" + (margin.left + width) + ", " + (margin.top + 125) + ")");
 
 // Create the tooltip box
