@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WWP Visualizations</title>
+    <script type="module" src="new-vis.js"></script>
+    <link rel="stylesheet" href="new-styles.css">
+  </head>
+  <body>
+    <div class="wrapper">
+        <div class="header">
+        <h1 class="title">Exploring Principal Component Analysis with the Women Writers' Project</h1>
+        <p id="info">This visualization shows the plotting of 16th and 17th century texts by their first and second principal component. Users can toggle the different genres and authors to filter the data.</p>
+        </div>
+        <figure id="container"></figure>
+        <div class="legends">
+            <fieldset class="control" id="shape-field-selector">
+                <legend>Shape Field Selector</legend>
+                <p>Use this field to select which parameter, genre or field, should be mapped to the shapes on the scatter plot.</p>
+                <label for="genre-field-control">Genre</label>
+                <input type="radio" id="genre-field-control" name="genre-field-method" value="Simple Genre" checked="true">
+                <label for="century-field-control">Century</label>
+                <input type="radio" id="century-field-control" name="genre-field-method" value="Simple Date">
+            </fieldset>
+            <fieldset class="control" id="genre-legend">
+                <legend>Genre</legend>
+            </fieldset>
+            <fieldset class="control" id="author-legend">
+                <legend>Authors</legend>
+            </fieldset>
+            <button id="reset-button">Reset</button>
+        </div>
+    </div>
+  </body>
+</html>
