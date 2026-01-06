@@ -86,6 +86,7 @@ const tooltip = d3.select("#container")
     .append("div")
     .attr("class", "tooltip")
 
+// Creates a global state where all data on genres/centuries, authors, colors, shapes can be kept
 const state = {
     authors: new Set(),
     genres: new Set(),
@@ -97,12 +98,16 @@ const state = {
 };
 
 
+/**
+ * Create the legend for the author fields
+ */
 function authorLegendCreate(){
+    // d3 data join
     const authorLegend = d3.select("#author-legend")
         .selectAll("span")
         .data(state.authors)
         .join("span");
-
+    // create the circle symbol for each author
     authorLegend.append("svg")
         .attr("width", 15)
         .attr("height", 15)
@@ -110,11 +115,11 @@ function authorLegendCreate(){
         .attr("transform", "translate(9,9)")
         .attr("d", d3.symbol())
         .style("fill", d => state.color(d))
-    
+    // Name
     authorLegend.append("label")
         .attr("for", d => `${d}-control`)
         .text(d => d)
-
+    // creating the checkbox with functionality  
     authorLegend.append("input")
         .attr("type", "checkbox")
         .attr("id", d => `${d}-control`)
@@ -130,13 +135,16 @@ function authorLegendCreate(){
         updatePointVisibility()});
 }
 
-
+/**
+ * Create the genre/century legend and shapes
+ */
 function genreLegendCreate(){
+    // d3 data join
     const genreLegend = d3.select("#genre-legend")
         .selectAll("span")
         .data(state.genres)
         .join("span");
-
+    // appending the shape
     genreLegend.append("svg")
         .attr("width", 15)
         .attr("height", 15)
@@ -144,11 +152,11 @@ function genreLegendCreate(){
         .attr("transform", "translate(9, 9)")
         .attr("d", d => d3.symbol().type(state.shape(d)).size(50)())
         .attr("fill", "black")
-
+    // name
     genreLegend.append("label")
         .attr("for", d => `${d}-control`)
         .text(d => d)
-    
+    // checkbox and interactivity
     genreLegend.append("input")
         .attr("type", "checkbox")
         .attr("id", d => `${d}-control`)
@@ -164,6 +172,13 @@ function genreLegendCreate(){
         updatePointVisibility()});    
 }
 
+/**
+ * This function returns the shape scale based on whether it will be the century or the genre
+ * 
+ * @param {*} shapeField: the column name for the shapefield, either Simple Genre or Simple Date
+ * @param {*} data: the CSV data
+ * @returns 
+ */
 function createShapeScale(shapeField, data) {
     const shape = d3.scaleOrdinal()
         .domain(data.map(d => d[shapeField]))
@@ -171,6 +186,12 @@ function createShapeScale(shapeField, data) {
     return shape
 }
 
+/**
+ * This function creates the author scale based on color
+ * 
+ * @param {*} data: the CSV data
+ * @returns 
+ */
 function createAuthorScale(data) {
     // Create author-color scale but group together authors with 1 publication
     // Create a rollup map of author count
@@ -186,35 +207,17 @@ function createAuthorScale(data) {
     return color
 }
 
+/**
+ * Updates the point visibilities based on genre/century and author
+ */
 function updatePointVisibility() {
         dataRegion.selectAll("path.data-point").each(function (d) {
-            // const point = d3.select(this);
-            // const classList = this.classList;
-            // // Get the author and genre from the point's classes or data
-            // let pointAuthor, pointGenre;
-            // // let isVisible = false;
-
-            // // Loop through the classes to find which author and genre this point has
-            // classList.forEach(className => {
-            //     if (state.authors.has(className)) {
-            //         pointAuthor = className;
-            //     }
-            //     if (state.genres.has(className)) {
-            //         pointGenre = className;
-            //     }
-            // });
-            // const isVisible = pointAuthor && pointGenre &&
-            // state.activeAuthors.has(pointAuthor) && state.activeGenres.has(pointGenre);
-            // // Point is visible only if BOTH its author and genre are active
-            // // isVisible = pointAuthor && pointGenre &&
-            // //     state.activeAuthors.has(pointAuthor) && state.activeGenres.has(pointGenre);
-
-            // point.transition().style("opacity", isVisible ? 1 : 0.1)
-            //     .style("pointer-events", isVisible ? "all" : "none");
+            // Get the author and genre from the point's classes or data
             const point = d3.select(this);
+            // Point is visible only if BOTH its author and genre are active
             const isVisible = state.activeAuthors.has(d.AuthorGrouped) && 
                             state.activeGenres.has(d[state.shapeField]);
-            
+            // transition
             point.interrupt()
                 .transition()
                 .style("opacity", isVisible ? 1 : 0.1)
@@ -222,20 +225,31 @@ function updatePointVisibility() {
         });
 }
 
+/**
+ * Creates the reset button 
+ */
 function resetButton(){
     d3.select("#reset-button")
     .on("click", function () {
+        // clear the state and repopulate it with all authors/genres
         state.activeAuthors.clear();
         state.authors.forEach(a => state.activeAuthors.add(a));
         state.activeGenres.clear();
         state.genres.forEach(g => state.activeGenres.add(g));
-        updatePointVisibility(state.activeAuthors, state.activeGenres, new Set(state.authors), new Set(state.genres));
+        // Update the point visibility
+        updatePointVisibility();
+        // Reset all button filters
         d3.selectAll(".legends #genre-legend input").property("checked", true)
         d3.selectAll(".legends #author-legend input").property("checked", true)
     });
 }
 
-
+/**
+ * 
+ * This function plots all of the points on the graph
+ * 
+ * @param {*} data: The csv data 
+ */
 function plotPoints(data){
     // add data
     dataRegion.append('g')
@@ -265,17 +279,13 @@ function plotPoints(data){
             tooltip.transition().duration(200).style("opacity", 0);
         });
 
-    // const genres = shape.domain();
-    // const authors = color.domain();
-
-    // // Track which authors and genres are active (now all visible)
-    // let state.activeAuthors = new Set(authors);
-    // let state.activeGenres = new Set(genres);
-
-    // return {genres, authors, state.activeAuthors, state.activeGenres}
-
 }
 
+/**
+ * This function runs all of the code to draw all parts of the visualization
+ * 
+ * @param {*} data: The CSV data
+ */
 function draw(data) {
     state.shape = createShapeScale(state.shapeField, data)
     state.color = createAuthorScale(data)
@@ -290,6 +300,7 @@ function draw(data) {
     resetButton();
 }
 
+// attaching the functionality for the genre/century switcher radio button
 d3.selectAll("#shape-field-selector input")
     .on("change", function(event, d) {
         const selectedValue = event.target.value;
@@ -298,6 +309,9 @@ d3.selectAll("#shape-field-selector input")
         draw(globalData);
     });
 
+/**
+ * This function resets and removes the relevant parts of the graph to be redrawn
+ */
 function reset() {
     d3.selectAll("path.data-point")
         .remove();
@@ -311,12 +325,9 @@ function reset() {
 }
 
 
-
+// specifying the global data and drawing the graph.
 let globalData;
 d3.csv("wwo-pca-edited.csv").then(function(data) {
     globalData = data;
     draw(globalData);
 });
-
-// Append the SVG element.
-// d3.select("#container").node().appendChild(svg.node());
