@@ -9,24 +9,29 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <div class="header">
-      <h1 id="title">Exploring Principal Component Analysis with the Women Writers' Project</h1>
-      <fieldset class="control">
-        <legend>Genre</legend>
-        <label for="click-control">Click </label>
-        <input type="radio" id="click-control" name="upmethod" value="click" checked="checked" />
-        <label for="mouseover-control">Mouseover </label>
-        <input type="radio" id="mouseover-control" name="upmethod" value="mouseover" />
-      </fieldset>
-      <fieldset class="control">
-        <legend>Author</legend>
-        <label for="click-control">Click </label>
-        <input type="radio" id="click-control" name="upmethod" value="click" checked="checked" />
-        <label for="mouseover-control">Mouseover </label>
-        <input type="radio" id="mouseover-control" name="upmethod" value="mouseover" />
-      </fieldset>
-      <p id="info">This visualization shows the plotting of 16th and 17th century texts by their first and second principal component.</p>
+    <div class="wrapper">
+        <div class="header">
+        <h1 class="title">Exploring Principal Component Analysis with the Women Writers' Project</h1>
+        <p id="info">This visualization shows the plotting of 16th and 17th century texts by their first and second principal component. Users can toggle the different genres and authors to filter the data.</p>
+        </div>
+        <figure id="container"></figure>
+        <div class="legends">
+            <fieldset class="control" id="shape-field-selector">
+                <legend>Shape Field Selector</legend>
+                <p>Use this field to select which parameter, genre or field, should be mapped to the shapes on the scatter plot.</p>
+                <label for="genre-field-control">Genre</label>
+                <input type="radio" id="genre-field-control" name="genre-field-method" value="Simple Genre" checked="true">
+                <label for="century-field-control">Century</label>
+                <input type="radio" id="century-field-control" name="genre-field-method" value="Simple Date">
+            </fieldset>
+            <fieldset class="control" id="genre-legend">
+                <legend>Genre</legend>
+            </fieldset>
+            <fieldset class="control" id="author-legend">
+                <legend>Authors</legend>
+            </fieldset>
+            <button id="reset-button">Reset</button>
+        </div>
     </div>
-    <figure id="container"></figure>
   </body>
 </html>
