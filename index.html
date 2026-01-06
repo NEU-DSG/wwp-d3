@@ -12,14 +12,16 @@
     <div class="wrapper">
         <header>
           <h1 class="title">Exploring Principal Component Analysis with the Women Writers' Project</h1>
-          <p id="info">This visualization shows the plotting of 16th and 17th century texts by their first and second principal component. Users can toggle the different genres and authors to filter the data.</p>
+          <p id="info">This visualization shows the plotting of 16th and 17th century texts by their first and second principal component. Users can toggle the different genres, centures, or authors to filter the data. 
+          Hovering over a point will bring up more information in a tooltip. Click the reset button to reset all toggled checkboxes.
+          </p>
         </header>
         <main>
           <figure id="container"></figure>
           <div class="legends">
             <fieldset class="control" id="shape-field-selector">
                 <legend>Shape Field Selector</legend>
-                <p>Use this field to select which parameter, genre or field, should be mapped to the shapes on the scatter plot.</p>
+                <p>Use this field to select which parameter, genre or century, should be mapped to the shapes on the scatter plot.</p>
                 <input type="radio" id="genre-field-control" name="genre-field-method" value="Simple Genre" checked>
                 <label for="genre-field-control">Genre</label>
                 <input type="radio" id="century-field-control" name="genre-field-method" value="Simple Date">
