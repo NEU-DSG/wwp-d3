@@ -139,6 +139,9 @@ function authorLegendCreate(){
  * Create the genre/century legend and shapes
  */
 function genreLegendCreate(){
+    // rename the legend name
+    d3.select("#genre-legend legend")
+        .text(state.shapeField === "Simple Genre" ? "Genre" : "Century");
     // d3 data join
     const genreLegend = d3.select("#genre-legend")
         .selectAll("span")
@@ -271,7 +274,7 @@ function plotPoints(data){
         // mouseover tooltip function
         .on("mouseover", function (event, d) {
             tooltip.transition().duration(200).style("opacity", .9);
-            tooltip.html(`Author: ${d['Full Author']}<br>PC1: ${d.PC1}<br>PC2: ${d.PC2}<br>Simple Genre: ${d[state.shapeField]}<br>WWO Title: ${d['WWO Title']}`)
+            tooltip.html(`Author: ${d['Full Author']}<br>PC1: ${d.PC1}<br>PC2: ${d.PC2}<br>${state.shapeField}: ${d[state.shapeField]}<br>WWO Title: ${d['WWO Title']}`)
                 .style("left", (event.pageX + 10) + "px")
                 .style("top", (event.pageY - 10) + "px");
         })
