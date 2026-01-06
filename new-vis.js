@@ -86,12 +86,21 @@ const tooltip = d3.select("#container")
     .append("div")
     .attr("class", "tooltip")
 
+const state = {
+    authors: new Set(),
+    genres: new Set(),
+    color: null,
+    shape: null,
+    activeAuthors: new Set(),
+    activeGenres: new Set(),
+    shapeField: "Simple Genre"
+};
 
 
-function authorLegendCreate(authors, color, activeAuthors, activeGenres){
+function authorLegendCreate(){
     const authorLegend = d3.select("#author-legend")
         .selectAll("span")
-        .data(authors)
+        .data(state.authors)
         .join("span");
 
     authorLegend.append("svg")
@@ -100,7 +109,7 @@ function authorLegendCreate(authors, color, activeAuthors, activeGenres){
         .append("path")
         .attr("transform", "translate(9,9)")
         .attr("d", d3.symbol())
-        .style("fill", d => color(d))
+        .style("fill", d => state.color(d))
     
     authorLegend.append("label")
         .attr("for", d => `${d}-control`)
@@ -113,19 +122,19 @@ function authorLegendCreate(authors, color, activeAuthors, activeGenres){
         .attr("value", d => d)
         .attr("checked", true)
         .on("change", function(event, d) {
-            if (activeAuthors.has(d)) {
-                activeAuthors.delete(d);
+            if (state.activeAuthors.has(d)) {
+                state.activeAuthors.delete(d);
         } else {
-            activeAuthors.add(d)
+            state.activeAuthors.add(d)
         }
-        updatePointVisibility(activeAuthors, activeGenres)});
+        updatePointVisibility()});
 }
 
 
-function genreLegendCreate(genres, shape, activeAuthors, activeGenres){
+function genreLegendCreate(){
     const genreLegend = d3.select("#genre-legend")
         .selectAll("span")
-        .data(genres)
+        .data(state.genres)
         .join("span");
 
     genreLegend.append("svg")
@@ -133,8 +142,8 @@ function genreLegendCreate(genres, shape, activeAuthors, activeGenres){
         .attr("height", 15)
         .append("path")
         .attr("transform", "translate(9, 9)")
-        .attr("d", d => d3.symbol().type(shape(d)).size(50)())
-        .attr("fill")
+        .attr("d", d => d3.symbol().type(state.shape(d)).size(50)())
+        .attr("fill", "black")
 
     genreLegend.append("label")
         .attr("for", d => `${d}-control`)
@@ -147,12 +156,12 @@ function genreLegendCreate(genres, shape, activeAuthors, activeGenres){
         .attr("value", d => d)
         .attr("checked", true)
         .on("change", function(event, d) {
-            if (activeGenres.has(d)) {
-                activeGenres.delete(d);
+            if (state.activeGenres.has(d)) {
+                state.activeGenres.delete(d);
         } else {
-            activeGenres.add(d)
+            state.activeGenres.add(d)
         }
-        updatePointVisibility(activeAuthors, activeGenres)});    
+        updatePointVisibility()});    
 }
 
 function createShapeScale(shapeField, data) {
@@ -177,45 +186,57 @@ function createAuthorScale(data) {
     return color
 }
 
-function updatePointVisibility(activeAuthors, activeGenres) {
-        dataRegion.selectAll("path.data-point").each(function () {
+function updatePointVisibility() {
+        dataRegion.selectAll("path.data-point").each(function (d) {
+            // const point = d3.select(this);
+            // const classList = this.classList;
+            // // Get the author and genre from the point's classes or data
+            // let pointAuthor, pointGenre;
+            // // let isVisible = false;
+
+            // // Loop through the classes to find which author and genre this point has
+            // classList.forEach(className => {
+            //     if (state.authors.has(className)) {
+            //         pointAuthor = className;
+            //     }
+            //     if (state.genres.has(className)) {
+            //         pointGenre = className;
+            //     }
+            // });
+            // const isVisible = pointAuthor && pointGenre &&
+            // state.activeAuthors.has(pointAuthor) && state.activeGenres.has(pointGenre);
+            // // Point is visible only if BOTH its author and genre are active
+            // // isVisible = pointAuthor && pointGenre &&
+            // //     state.activeAuthors.has(pointAuthor) && state.activeGenres.has(pointGenre);
+
+            // point.transition().style("opacity", isVisible ? 1 : 0.1)
+            //     .style("pointer-events", isVisible ? "all" : "none");
             const point = d3.select(this);
-            const classList = this.classList;
-            // Get the author and genre from the point's classes or data
-            let pointAuthor, pointGenre;
-            let isVisible = false;
-
-            // Loop through the classes to find which author and genre this point has
-            classList.forEach(className => {
-                if (activeAuthors.has(className)) {
-                    pointAuthor = className;
-                }
-                if (activeGenres.has(className)) {
-                    pointGenre = className;
-                }
-            });
-            // Point is visible only if BOTH its author and genre are active
-            isVisible = pointAuthor && pointGenre &&
-                activeAuthors.has(pointAuthor) && activeGenres.has(pointGenre);
-
-            point.transition().style("opacity", isVisible ? 1 : 0.1)
+            const isVisible = state.activeAuthors.has(d.AuthorGrouped) && 
+                            state.activeGenres.has(d[state.shapeField]);
+            
+            point.interrupt()
+                .transition()
+                .style("opacity", isVisible ? 1 : 0.1)
                 .style("pointer-events", isVisible ? "all" : "none");
         });
 }
 
-function resetButton(authors, genres, activeAuthors, activeGenres){
+function resetButton(){
     d3.select("#reset-button")
     .on("click", function () {
-        activeAuthors = new Set(authors)
-        activeGenres = new Set(genres);
-        updatePointVisibility(activeAuthors, activeGenres);
+        state.activeAuthors.clear();
+        state.authors.forEach(a => state.activeAuthors.add(a));
+        state.activeGenres.clear();
+        state.genres.forEach(g => state.activeGenres.add(g));
+        updatePointVisibility(state.activeAuthors, state.activeGenres, new Set(state.authors), new Set(state.genres));
         d3.selectAll(".legends #genre-legend input").property("checked", true)
         d3.selectAll(".legends #author-legend input").property("checked", true)
     });
 }
 
 
-function plotPoints(shapeField, shape, color, data){
+function plotPoints(data){
     // add data
     dataRegion.append('g')
         .selectAll("path")
@@ -223,20 +244,20 @@ function plotPoints(shapeField, shape, color, data){
         .join("path")
         // symbol
         .attr("d", d3.symbol()
-            .type(function (d) { return shape(d[shapeField]); })
+            .type(function (d) { return state.shape(d[state.shapeField]); })
             .size(40))
         // position
         .attr("transform", function (d) {
             return `translate(${x(d.PC1)}, ${y(d.PC2)})`;
         })
         // setting class - this is mainly for activating and muting
-        .attr("class", function (d) { return `data-point ${d[shapeField]} ${d['AuthorGrouped']}` })
+        .attr("class", function (d) { return `data-point ${d[state.shapeField]} ${d['AuthorGrouped']}` })
         // color
-        .style("fill", d => color(d.AuthorGrouped))
+        .style("fill", d => state.color(d.AuthorGrouped))
         // mouseover tooltip function
         .on("mouseover", function (event, d) {
             tooltip.transition().duration(200).style("opacity", .9);
-            tooltip.html(`Author: ${d['Full Author']}<br>PC1: ${d.PC1}<br>PC2: ${d.PC2}<br>Simple Genre: ${d[shapeField]}<br>WWO Title: ${d['WWO Title']}`)
+            tooltip.html(`Author: ${d['Full Author']}<br>PC1: ${d.PC1}<br>PC2: ${d.PC2}<br>Simple Genre: ${d[state.shapeField]}<br>WWO Title: ${d['WWO Title']}`)
                 .style("left", (event.pageX + 10) + "px")
                 .style("top", (event.pageY - 10) + "px");
         })
@@ -244,64 +265,58 @@ function plotPoints(shapeField, shape, color, data){
             tooltip.transition().duration(200).style("opacity", 0);
         });
 
-    const genres = shape.domain();
-    const authors = color.domain();
+    // const genres = shape.domain();
+    // const authors = color.domain();
 
-    // Track which authors and genres are active (now all visible)
-    let activeAuthors = new Set(authors);
-    let activeGenres = new Set(genres);
+    // // Track which authors and genres are active (now all visible)
+    // let state.activeAuthors = new Set(authors);
+    // let state.activeGenres = new Set(genres);
 
-    return {genres, authors, activeAuthors, activeGenres}
+    // return {genres, authors, state.activeAuthors, state.activeGenres}
 
 }
 
-let shapeField = "Simple Genre"
+function draw(data) {
+    state.shape = createShapeScale(state.shapeField, data)
+    state.color = createAuthorScale(data)
+    state.authors = new Set(state.color.domain());
+    state.genres = new Set(state.shape.domain());
+    state.activeAuthors = new Set(state.color.domain());
+    state.activeGenres = new Set(state.shape.domain());
 
-d3.csv("wwo-pca-edited.csv").then(function (data) {
-    const shape = createShapeScale(shapeField, data)
-    const color = createAuthorScale(data)
-    const {genres, authors, activeAuthors, activeGenres} = plotPoints(shapeField, shape, color, data)
-    genreLegendCreate(genres, shape, activeAuthors, activeGenres)
-    authorLegendCreate(authors, color, activeAuthors, activeGenres)
-    resetButton(authors, genres, activeAuthors, activeGenres)
-});
+    plotPoints(data)
+    genreLegendCreate()
+    authorLegendCreate()
+    resetButton();
+}
 
 d3.selectAll("#shape-field-selector input")
     .on("change", function(event, d) {
         const selectedValue = event.target.value;
-        changeShape(selectedValue)
+        reset();
+        state.shapeField = selectedValue
+        draw(globalData);
     });
 
-function changeShape(selectedValue) {
-    d3.csv("wwo-pca-edited.csv").then(function (data) {
-        console.log(selectedValue)
-        const shape = createShapeScale(selectedValue, data)
-        d3.selectAll("path.data-point")
-            .attr("d", d3.symbol()
-                .type(function (d) { return shape(d[selectedValue]); })
-                .size(40))
-        if (selectedValue == "Simple Genre") {
-            d3.select("#genre-legend legend")
-                .text("Genre")
-        } else {
-            d3.select("#genre-legend legend")
-                .text("Century")
-        }
-        
-        const centuryGroup = d3.select("#genre-legend")
-            .selectAll("span")
-            .data(shape.domain())
-            .join("span")
-
-        centuryGroup.append("label")
-            .attr("for", d => `${d}-control`)
-            .text(d => d)
-    });
+function reset() {
+    d3.selectAll("path.data-point")
+        .remove();
+    d3.select("#genre-legend")
+        .selectAll("span")
+        .remove()
+    d3.select("#author-legend")
+        .selectAll("span")
+        .remove()
+    d3.select("#reset-button").on("click", null);
 }
 
 
 
-
+let globalData;
+d3.csv("wwo-pca-edited.csv").then(function(data) {
+    globalData = data;
+    draw(globalData);
+});
 
 // Append the SVG element.
-d3.select("#container").node().appendChild(svg.node());
+// d3.select("#container").node().appendChild(svg.node());
