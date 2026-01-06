@@ -94,6 +94,8 @@ const state = {
     shape: null,
     activeAuthors: new Set(),
     activeGenres: new Set(),
+    // allAuthors: new Set(),
+    // featuredAuthors: new Set(),
     shapeField: "Simple Genre"
 };
 
@@ -107,18 +109,6 @@ function authorLegendCreate(){
         .selectAll("span")
         .data(state.authors)
         .join("span");
-    // create the circle symbol for each author
-    authorLegend.append("svg")
-        .attr("width", 15)
-        .attr("height", 15)
-        .append("path")
-        .attr("transform", "translate(9,9)")
-        .attr("d", d3.symbol())
-        .style("fill", d => state.color(d))
-    // Name
-    authorLegend.append("label")
-        .attr("for", d => `${d}-control`)
-        .text(d => d)
     // creating the checkbox with functionality  
     authorLegend.append("input")
         .attr("type", "checkbox")
@@ -133,6 +123,18 @@ function authorLegendCreate(){
             state.activeAuthors.add(d)
         }
         updatePointVisibility()});
+    // create the circle symbol for each author
+    authorLegend.append("svg")
+        .attr("width", 15)
+        .attr("height", 15)
+        .append("path")
+        .attr("transform", "translate(9,9)")
+        .attr("d", d3.symbol())
+        .style("fill", d => state.color(d))
+    // Name
+    authorLegend.append("label")
+        .attr("for", d => `${d}-control`)
+        .text(d => d)
 }
 
 /**
@@ -147,18 +149,6 @@ function genreLegendCreate(){
         .selectAll("span")
         .data(state.genres)
         .join("span");
-    // appending the shape
-    genreLegend.append("svg")
-        .attr("width", 15)
-        .attr("height", 15)
-        .append("path")
-        .attr("transform", "translate(9, 9)")
-        .attr("d", d => d3.symbol().type(state.shape(d)).size(50)())
-        .attr("fill", "black")
-    // name
-    genreLegend.append("label")
-        .attr("for", d => `${d}-control`)
-        .text(d => d)
     // checkbox and interactivity
     genreLegend.append("input")
         .attr("type", "checkbox")
@@ -172,7 +162,19 @@ function genreLegendCreate(){
         } else {
             state.activeGenres.add(d)
         }
-        updatePointVisibility()});    
+        updatePointVisibility()});  
+    // appending the shape
+    genreLegend.append("svg")
+        .attr("width", 15)
+        .attr("height", 15)
+        .append("path")
+        .attr("transform", "translate(9, 9)")
+        .attr("d", d => d3.symbol().type(state.shape(d)).size(50)())
+        .attr("fill", "black")
+    // name
+    genreLegend.append("label")
+        .attr("for", d => `${d}-control`)
+        .text(d => d)
 }
 
 /**
@@ -198,11 +200,11 @@ function createShapeScale(shapeField, data) {
 function createAuthorScale(data) {
     // Create author-color scale but group together authors with 1 publication
     // Create a rollup map of author count
-    const authorCounts = d3.rollup(data, v => v.length, d => d.Author)
+    const authorCounts = d3.rollup(data, v => v.length, d => d['Full Author'])
     // Add a column to the dataset of either the author name or Other if they
     // have less than five publications
     data.forEach(d => {
-        d.AuthorGrouped = authorCounts.get(d.Author) > 5 ? d.Author : "Other"
+        d.AuthorGrouped = authorCounts.get(d['Full Author']) > 5 ? d['Full Author'] : "Other"
     })
     const color = d3.scaleOrdinal()
         .domain(data.map(d => d.AuthorGrouped))
@@ -296,6 +298,8 @@ function draw(data) {
     state.genres = new Set(state.shape.domain());
     state.activeAuthors = new Set(state.color.domain());
     state.activeGenres = new Set(state.shape.domain());
+    // state.allAuthors = new Set(data.map(d => d['Full Author']));
+    // console.log(state.allAuthors)
 
     plotPoints(data)
     genreLegendCreate()
@@ -333,4 +337,10 @@ let globalData;
 d3.csv("wwo-pca-edited.csv").then(function(data) {
     globalData = data;
     draw(globalData);
+    // d3.select("#author-dropdown")
+    // .selectAll("option")
+    // .data(Array.from(state.allAuthors))
+    // .join("option")
+    // .attr("value", d => d)
+    // .text(d => d);
 });
