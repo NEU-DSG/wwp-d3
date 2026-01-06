@@ -19,14 +19,22 @@
             <fieldset class="control" id="shape-field-selector">
                 <legend>Shape Field Selector</legend>
                 <p>Use this field to select which parameter, genre or field, should be mapped to the shapes on the scatter plot.</p>
-                <label for="genre-field-control">Genre</label>
                 <input type="radio" id="genre-field-control" name="genre-field-method" value="Simple Genre" checked="true">
-                <label for="century-field-control">Century</label>
+                <label for="genre-field-control">Genre</label>
                 <input type="radio" id="century-field-control" name="genre-field-method" value="Simple Date">
+                <label for="century-field-control">Century</label>
             </fieldset>
             <fieldset class="control" id="genre-legend">
                 <legend>Genre</legend>
             </fieldset>
+            <!--
+            <fieldset class="control" id="author-selector">
+                <legend>Author Selection</legend>
+                <p>Use this field to select up to six authors to color on the plot, the last field will be "Other" and will include all nonselected authors.</p>
+                <select id="author-dropdown" multiple>
+                </select>
+            </fieldset>
+            -->
             <fieldset class="control" id="author-legend">
                 <legend>Authors</legend>
             </fieldset>
