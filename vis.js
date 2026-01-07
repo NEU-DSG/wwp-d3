@@ -86,17 +86,6 @@ const tooltip = d3.select("#container")
     .append("div")
     .attr("class", "tooltip")
 
-// Creates a global state where all data on genres/centuries, authors, colors, shapes can be kept
-const state = {
-    authors: new Set(),
-    genres: new Set(),
-    color: null,
-    shape: null,
-    activeAuthors: new Set(),
-    activeGenres: new Set(),
-    shapeField: "Simple Genre"
-};
-
 const FEATURED_AUTHORS = [
     "Behn, Aphra",
     "Cavendish, Margaret (Lucas), Duchess of Newcastle",
@@ -105,6 +94,71 @@ const FEATURED_AUTHORS = [
     "Haywood, Eliza (Fowler)",
     "Philips, Katherine (Fowler)"
 ]
+
+// Creates a global state where all data on genres/centuries, authors, colors, shapes can be kept
+const state = {
+    authors: new Set(),
+    genres: new Set(),
+    color: null,
+    shape: null,
+    activeAuthors: new Set(),
+    activeGenres: new Set(),
+    allAuthors: new Set(),
+    featuredAuthors: FEATURED_AUTHORS,
+    shapeField: "Simple Genre"
+};
+
+
+/**
+ * This function creates the author selector list
+ */
+function createAuthorSelector(data) {
+    state.allAuthors = [...new Set(data.map(d => d['Full Author']))].sort();
+    
+    const container = d3.select("#author-checkboxes");
+    const items = container.selectAll("div")
+        .data(state.allAuthors)
+        .join("div")
+        .attr("class", "author-select")
+
+    items.append("input")
+        .attr("type", "checkbox")
+        .attr("value", d => d)
+        .attr("id", d => `select-${d}`)
+        .property("checked", d => state.featuredAuthors.includes(d));
+
+    items.append("label")
+        .attr("for", d => `select-${d}`)
+        .text(d => d);
+    
+    // Handle checkbox changes
+    d3.select("#author-change-button")
+        .on("click", function () {
+            const checked = container.selectAll("input:checked").nodes();
+            if (checked.length > 6) {
+                this.checked = false;
+                alert("Maximum 6 authors allowed");
+                return;
+            }
+            state.featuredAuthors = checked.map(el => el.value);
+            reset();
+            draw(globalData);
+        })
+    d3.select('#clear-selection-button')
+        .on("click", function () {
+            container.selectAll("input:checked")
+                .property("checked", false)
+        })
+    d3.select('#restore-button')
+        .on("click", function () {
+            state.featuredAuthors = FEATURED_AUTHORS
+            reset();
+            draw(globalData);
+        })
+
+}
+
+
 
 
 /**
@@ -208,7 +262,7 @@ function createAuthorScale(data) {
     // Add a column to the dataset of either the author name or Other if they
     // have are not in the FEATURED_AUTHORS list
     data.forEach(d => {
-        d.AuthorGrouped = FEATURED_AUTHORS.includes(d['Full Author']) ? d['Full Author'] : "Other"
+        d.AuthorGrouped = state.featuredAuthors.includes(d['Full Author']) ? d['Full Author'] : "Other"
     })
     const color = d3.scaleOrdinal()
         .domain(data.map(d => d.AuthorGrouped))
@@ -306,6 +360,7 @@ function draw(data) {
     plotPoints(data)
     genreLegendCreate()
     authorLegendCreate()
+    createAuthorSelector(data)
     resetButton();
 }
 
@@ -329,6 +384,9 @@ function reset() {
         .remove()
     d3.select("#author-legend")
         .selectAll("span")
+        .remove()
+    d3.select("#author-checkboxes")
+        .selectAll("div")
         .remove()
     d3.select("#reset-button").on("click", null);
 }
