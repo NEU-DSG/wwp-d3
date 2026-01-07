@@ -94,10 +94,17 @@ const state = {
     shape: null,
     activeAuthors: new Set(),
     activeGenres: new Set(),
-    // allAuthors: new Set(),
-    // featuredAuthors: new Set(),
     shapeField: "Simple Genre"
 };
+
+const FEATURED_AUTHORS = [
+    "Behn, Aphra",
+    "Cavendish, Margaret (Lucas), Duchess of Newcastle",
+    "Davies, Lady Eleanor",
+    "Elizabeth I",
+    "Haywood, Eliza (Fowler)",
+    "Philips, Katherine (Fowler)"
+]
 
 
 /**
@@ -198,13 +205,10 @@ function createShapeScale(shapeField, data) {
  * @returns 
  */
 function createAuthorScale(data) {
-    // Create author-color scale but group together authors with 1 publication
-    // Create a rollup map of author count
-    const authorCounts = d3.rollup(data, v => v.length, d => d['Full Author'])
     // Add a column to the dataset of either the author name or Other if they
-    // have less than five publications
+    // have are not in the FEATURED_AUTHORS list
     data.forEach(d => {
-        d.AuthorGrouped = authorCounts.get(d['Full Author']) > 5 ? d['Full Author'] : "Other"
+        d.AuthorGrouped = FEATURED_AUTHORS.includes(d['Full Author']) ? d['Full Author'] : "Other"
     })
     const color = d3.scaleOrdinal()
         .domain(data.map(d => d.AuthorGrouped))
@@ -298,8 +302,6 @@ function draw(data) {
     state.genres = new Set(state.shape.domain());
     state.activeAuthors = new Set(state.color.domain());
     state.activeGenres = new Set(state.shape.domain());
-    // state.allAuthors = new Set(data.map(d => d['Full Author']));
-    // console.log(state.allAuthors)
 
     plotPoints(data)
     genreLegendCreate()
@@ -337,10 +339,4 @@ let globalData;
 d3.csv("wwo-pca-edited.csv").then(function(data) {
     globalData = data;
     draw(globalData);
-    // d3.select("#author-dropdown")
-    // .selectAll("option")
-    // .data(Array.from(state.allAuthors))
-    // .join("option")
-    // .attr("value", d => d)
-    // .text(d => d);
 });
