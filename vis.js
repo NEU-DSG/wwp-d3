@@ -158,9 +158,6 @@ function createAuthorSelector(data) {
 
 }
 
-
-
-
 /**
  * Create the legend for the author fields
  */

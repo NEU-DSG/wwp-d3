@@ -1,12 +1,3 @@
-/* Took this from https://web.dev/articles/control-focus-with-tabindex */
-.author-legend-item:focus-visible {
-  outline: 4px dashed darkorange;
-}
-
-.legend-item:focus-visible {
-  outline: 4px dashed darkorange;
-}
-
 .tooltip {
     opacity: 0;
     position: absolute;
@@ -15,8 +6,6 @@
     color: white;
     border-radius: 5px;
     pointer-events: none;
-    font-family: sans-serif;
-    font-weight: lighter;
 }
 
 .control {
@@ -35,6 +24,7 @@ body{
   display: flex;
   flex-direction: column;
   font-family: sans-serif;
+  font-weight: lighter;
   color: #292826;
 }
 
@@ -47,7 +37,6 @@ header {
     display: grid;
     grid-template-columns: 1fr auto;
     grid-template-rows: auto;
-    grid-gap: 0.75rem;
     gap: 0.75rem;
     align-items: center;
 }
@@ -67,20 +56,15 @@ header p{
 }
 
 #x-axis {
-  font-family: sans-serif;
   text-anchor: middle;
-  font-weight: lighter;
 }
 
 #y-axis {
-  font-family: sans-serif;
   text-anchor: end;
-  font-weight: lighter;
 }
 
 #graph-title {
   margin: 0;
-  font-weight: lighter;
   text-anchor: middle;
 }
 
@@ -89,14 +73,11 @@ header p{
     grid-column-start: 1;
     grid-column-end: span 2;
     justify-self: left;
-    font-weight: lighter;
     font-size: 0.9rem;
     line-height: 120%;
 }
 
 #legendGroup {
-  font-family: sans-serif;
-  font-weight: lighter;
   font-size: 0.9rem;
 }
 
