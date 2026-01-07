@@ -103,3 +103,25 @@ header p{
 .legends fieldset span {
     margin-right: 15px;
 }
+
+#author-checkboxes {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 8px;
+    margin-bottom: 20px;
+}
+
+#author-checkboxes label {
+    display: block;
+    padding: 4px 0;
+    cursor: pointer;
+}
+
+.author-select {
+  display: flex;
+}
+
+.author-select input {
+  margin-right: 5px
+}
