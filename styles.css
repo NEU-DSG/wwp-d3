@@ -106,3 +106,12 @@ header p{
 .author-select input {
   margin-right: 5px
 }
+
+button {
+  font-family: sans-serif;
+  font-weight: lighter
+}
+
+footer p {
+  font-size: 0.8rem;
+}
