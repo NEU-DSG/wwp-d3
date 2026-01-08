@@ -9,15 +9,18 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    
     <div class="wrapper">
-        <header>
+        <main>
+          <figure id="container">
+          <header>
           <h1 class="title">Exploring Principal Component Analysis with the Women Writers' Project</h1>
           <p id="info">This visualization shows the plotting of 16th and 17th century texts by their first and second principal component. Users can toggle the different genres, centures, or authors to filter the data. 
           Hovering over a point will bring up more information in a tooltip. Click the reset button to reset all toggled checkboxes (except for the Author Selection checkboxes).
           </p>
         </header>
-        <main>
-          <figure id="container"></figure>
+          
+          </figure>
           <div class="legends">
             <fieldset class="control" id="shape-field-selector">
                 <legend>Shape Field Selector</legend>
@@ -35,7 +38,7 @@
                 <legend>Author Selection</legend>
                 <p>Use this field to select which authors you want to colored on the scatterplot. 
                 Select up to six authors, with the remaining authors being colored together as "Other", and click "Update Authors".
-                 Users can also clear all selections, and restore the selection to the original six authors who have the most texts in the dataset.
+                  Users can also clear all selections, and restore the selection to the original six authors who have the most texts in the dataset.
                 <div id="author-checkboxes"></div>
                 <button id="author-change-button">Update Authors</button>
                 <button id="clear-selection-button">Clear Selections</button>
@@ -48,9 +51,9 @@
             <button id="reset-button">Reset</button>
           </div>
         </main>
-        <footer>
+    </div>
+    <footer>
           <p> Created by Joel Lee from the <a href="https://dsg.northeastern.edu" target="_blank">Digital Scholarship Group</a> at <a href="https://library.northeastern.edu/" target="_blank">Northeastern University Library</a>.</p>
         </footer>
-    </div>
   </body>
 </html>

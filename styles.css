@@ -51,8 +51,17 @@ header p{
   font-weight: lighter;
 }
 
-.wrapper {
-    max-width: 55%;
+main {
+    display: flex;
+    align-items: flex-start;
+}
+
+figure {
+  margin: 0; 
+}
+
+.legends {
+  margin-top: 6.5rem; /* match caption height */
 }
 
 #x-axis {
@@ -114,4 +123,8 @@ button {
 
 footer p {
   font-size: 0.8rem;
+}
+
+#reset-button {
+  margin-left: 0.2rem;
 }
