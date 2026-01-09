@@ -110,28 +110,33 @@ const state = {
 
 
 /**
- * This function creates the author selector list
+ * This function creates the author selector list. This is the multiselect box of checkboxes
+ * that allows users to select which authors they want to be colored for filtering.
  */
 function createAuthorSelector(data) {
+    // edit state to a list of all authors
     state.allAuthors = [...new Set(data.map(d => d['Full Author']))].sort();
     
+    // select the author-checkboxes div and assign to container
     const container = d3.select("#author-checkboxes");
+    // Select all divs inside the container, and create a div for each author
     const items = container.selectAll("div")
         .data(state.allAuthors)
         .join("div")
         .attr("class", "author-select")
-
+    // append an input checkbox to each div
     items.append("input")
         .attr("type", "checkbox")
         .attr("value", d => d)
         .attr("id", d => `select-${d}`)
         .property("checked", d => state.featuredAuthors.includes(d));
-
+    // append a label for the checkbox in each div
     items.append("label")
         .attr("for", d => `select-${d}`)
         .text(d => d);
     
-    // Handle checkbox changes
+    // Handle checkbox changes: this first checks to make sure there are at most 6 authors selected
+    // and then assigns the featured authors to the selected checkbox nodes and redraws the plot
     d3.select("#author-change-button")
         .on("click", function () {
             const checked = container.selectAll("input:checked").nodes();
@@ -144,11 +149,13 @@ function createAuthorSelector(data) {
             reset();
             draw(globalData);
         })
+    // This button clears all of the selected checkboxes
     d3.select('#clear-selection-button')
         .on("click", function () {
             container.selectAll("input:checked")
                 .property("checked", false)
         })
+    // This button restores the selection to the top six authors based on text count
     d3.select('#restore-button')
         .on("click", function () {
             state.featuredAuthors = FEATURED_AUTHORS
