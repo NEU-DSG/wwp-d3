@@ -13,12 +13,12 @@ const height = 600 - margin.top - margin.bottom
 
 // Declare x scale
 const x = d3.scaleLinear()
-    .domain([-0.04, 0.06])
+    .domain([-0.05, 0.06])
     .range([0, width]);
 
 // Declare y scale
 const y = d3.scaleLinear()
-    .domain([-0.03, 0.05])
+    .domain([-0.04, 0.05])
     .range([height, 0]);
 
 // Create SVG container
@@ -32,9 +32,8 @@ const svg = d3.select("#container")
 
 // Create svg title for aria attributes
 svg
-    .append("title")
-    .attr("id", "wwp-title")
-    .text("PCA scatter plot for the Women Writers Project")
+    .attr("role", "img")
+    .attr("aria-label", "PCA scatter plot for the Women Writers Project");
 
 // Create svg desc for aria attributes
 svg
@@ -105,7 +104,7 @@ const state = {
     activeGenres: new Set(),
     allAuthors: new Set(),
     featuredAuthors: FEATURED_AUTHORS,
-    shapeField: "Simple Genre"
+    shapeField: "Genre"
 };
 
 
@@ -115,7 +114,7 @@ const state = {
  */
 function createAuthorSelector(data) {
     // edit state to a list of all authors
-    state.allAuthors = [...new Set(data.map(d => d['Full Author']))].sort();
+    state.allAuthors = [...new Set(data.map(d => d['Author']))].sort();
     
     // select the author-checkboxes div and assign to container
     const container = d3.select("#author-checkboxes");
@@ -208,7 +207,7 @@ function authorLegendCreate(){
 function genreLegendCreate(){
     // rename the legend name
     d3.select("#genre-legend legend")
-        .text(state.shapeField === "Simple Genre" ? "Genre" : "Century");
+        .text(state.shapeField === "Genre" ? "Genre" : "Time Period");
     // d3 data join
     const genreLegend = d3.select("#genre-legend")
         .selectAll("span")
@@ -250,10 +249,14 @@ function genreLegendCreate(){
  * @returns 
  */
 function createShapeScale(shapeField, data) {
+    const domain = shapeField === "Genre"
+        ? ["drama", "non-fiction", "verse", "fiction"]
+        : [...new Set(data.map(d => d[shapeField]))];
+
     const shape = d3.scaleOrdinal()
-        .domain(data.map(d => d[shapeField]))
+        .domain(domain)
         .range(d3.symbols);
-    return shape
+    return shape;
 }
 
 /**
@@ -266,7 +269,7 @@ function createAuthorScale(data) {
     // Add a column to the dataset of either the author name or Other if they
     // have are not in the FEATURED_AUTHORS list
     data.forEach(d => {
-        d.AuthorGrouped = state.featuredAuthors.includes(d['Full Author']) ? d['Full Author'] : "Other"
+        d.AuthorGrouped = state.featuredAuthors.includes(d['Author']) ? d['Author'] : "Other"
     })
     const color = d3.scaleOrdinal()
         .domain(data.map(d => d.AuthorGrouped))
@@ -338,7 +341,7 @@ function plotPoints(data){
         // mouseover tooltip function
         .on("mouseover", function (event, d) {
             tooltip.transition().duration(200).style("opacity", .9);
-            tooltip.html(`Author: ${d['Full Author']}<br>PC1: ${d.PC1}<br>PC2: ${d.PC2}<br>${state.shapeField}: ${d[state.shapeField]}<br>WWO Title: ${d['WWO Title']}`)
+            tooltip.html(`Title: ${d['Display title']}<br>Author: ${d['Author']}<br>PC1: ${d.PC1}<br>PC2: ${d.PC2}<br>Genre: ${d['Genre']}<br>Period: ${d['Period']}`)
                 .style("left", (event.pageX + 10) + "px")
                 .style("top", (event.pageY - 10) + "px");
         })
@@ -398,7 +401,7 @@ function reset() {
 
 // specifying the global data and drawing the graph.
 let globalData;
-d3.csv("wwo-pca-edited.csv").then(function(data) {
+d3.csv("1600-1720-wwo_pca.csv").then(function(data) {
     globalData = data;
     draw(globalData);
 });
