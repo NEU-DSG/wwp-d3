@@ -61,7 +61,7 @@ figure {
 }
 
 .legends {
-  margin-top: 6.5rem; /* match caption height */
+  margin-top: 6.5rem;
 }
 
 #x-axis {
@@ -95,7 +95,7 @@ figure {
 }
 
 #author-checkboxes {
-    max-height: 200px;
+    max-height: 150px;
     overflow-y: auto;
     border: 1px solid #ccc;
     padding: 8px;
@@ -133,11 +133,25 @@ footer p {
   max-width: 1500px;
 }
 
-#author-legend {
+#author-legend, #genre-legend {
   display: grid;
-  grid-template-columns: repeat(2, auto);
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
 }
 
-#author-legend p {
+#author-legend p, #genre-legend p {
   grid-column: 1 / -1;
+}
+
+#author-legend span, #genre-legend span {
+  display: flex;
+  align-items: center;
+}
+
+#genre-legend span svg, #author-legend span svg {
+  flex-shrink: 0;
+}
+
+.legends {
+  margin-top: 1rem;
 }
