@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WWP Visualizations</title>
+    <script type="module" src="cavendish-rs.js"></script>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    
+    <div class="wrapper">
+        <main>
+          <figure id="container">
+          <header>
+          <h1 class="title">Exploring Principal Component Analysis with the Women Writers' Project - Margaret Cavendish and the Royal Society</h1>
+          <p id="info">This visualization shows the plotting of texts from Margaret Cavendish and by authors from the Royal Society, by their first and second principal component. Data points in blue signify texts from the Royal Society, and all other colored points signify the different genre of texts written by Cavendish. Users can toggle the different genres to filter the data. 
+          Hovering over a point will bring up more information in a tooltip. Click the reset button to reset all toggled checkboxes.
+          </p>
+        </header>
+          
+          </figure>
+          <div class="legends">
+            <fieldset class="control" id="genre-legend">
+                <legend>Genre</legend>
+                <p>Use this field to select or mute the different Genres. All genres that are not "Royal Society text" are genres associated with works by Margaret Cavendish.</p>
+            </fieldset>
+            <button id="reset-button">Reset</button>
+          </div>
+        </main>
+    </div>
+    <footer>
+          <p> Created by Joel Lee from the <a href="https://dsg.northeastern.edu" target="_blank">Digital Scholarship Group</a> at <a href="https://library.northeastern.edu/" target="_blank">Northeastern University Library</a>.</p>
+        </footer>
+  </body>
+</html>
