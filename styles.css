@@ -132,3 +132,12 @@ footer p {
 .wrapper {
   max-width: 1500px;
 }
+
+#author-legend {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+}
+
+#author-legend p {
+  grid-column: 1 / -1;
+}
